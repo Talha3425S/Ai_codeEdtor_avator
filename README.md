@@ -70,10 +70,7 @@ Other dictated speech is added to the editor as a voice note.
 
 ## Docs
 
-Viva diagrams and planning files are in `docs/`:
+Planning files are in `docs/`:
 
-- `architecture.md`
-- `sequence-diagram.md`
-- `use-case-diagram.md`
 - `project-plan.md`
 - `remaining-work.md`
