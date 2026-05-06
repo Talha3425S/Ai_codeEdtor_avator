@@ -3,6 +3,7 @@ import Avatar from '../components/Avatar'
 import Editor from '../components/Editor'
 import OutputPanel from '../components/OutputPanel'
 import Toolbar from '../components/Toolbar'
+import VoiceControl from '../components/VoiceControl'
 import {
   explainCode,
   fixCode,
@@ -49,6 +50,10 @@ function Home() {
     }
   }
 
+  const insertVoiceText = (text) => {
+    setCode((currentCode) => `${currentCode}\n\n// Voice note: ${text}`)
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -66,6 +71,11 @@ function Home() {
         <Editor code={code} onChange={setCode} />
         <aside className="side-column">
           <Toolbar onAction={runAction} loading={loading} />
+          <VoiceControl
+            onCommand={runAction}
+            onInsert={insertVoiceText}
+            loading={loading}
+          />
           <OutputPanel status={status} result={result} error={error} />
           <Avatar text={error || result} />
         </aside>
@@ -75,4 +85,3 @@ function Home() {
 }
 
 export default Home
-

@@ -56,3 +56,24 @@ Open the app at `http://localhost:5173`.
 ## Project Flow
 
 User writes code, clicks an action, the frontend sends the code to the backend, the backend processes the AI or scanner request, and the output panel displays the result. The avatar can read the result aloud.
+
+## Voice Commands
+
+The browser voice control supports simple commands:
+
+- `scan security`
+- `explain code`
+- `fix code`
+- `generate code`
+
+Other dictated speech is added to the editor as a voice note.
+
+## Docs
+
+Viva diagrams and planning files are in `docs/`:
+
+- `architecture.md`
+- `sequence-diagram.md`
+- `use-case-diagram.md`
+- `project-plan.md`
+- `remaining-work.md`

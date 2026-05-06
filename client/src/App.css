@@ -136,6 +136,24 @@
   opacity: 0.58;
 }
 
+.voice-body {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.voice-actions {
+  display: grid;
+}
+
+.voice-status {
+  min-height: 20px;
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .output-body {
   min-height: 230px;
   padding: 14px;

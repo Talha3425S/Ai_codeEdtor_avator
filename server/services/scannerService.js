@@ -28,6 +28,28 @@ const checks = [
     message: 'Unsafe HTML rendering pattern detected.',
     fix: 'Sanitize input or render text content safely.',
   },
+  {
+    id: 'command-injection',
+    severity: 'High',
+    test: (code) =>
+      /(exec|execSync|spawn)\s*\([^)]*\+|child_process/i.test(code),
+    message: 'Possible command execution risk detected.',
+    fix: 'Avoid passing user input into shell commands.',
+  },
+  {
+    id: 'nosql-injection',
+    severity: 'Medium',
+    test: (code) => /find(One)?\s*\(\s*req\.(body|query|params)/i.test(code),
+    message: 'Possible NoSQL injection pattern detected.',
+    fix: 'Validate and whitelist request fields before database queries.',
+  },
+  {
+    id: 'weak-random-token',
+    severity: 'Low',
+    test: (code) => /Math\.random\s*\(\)[\s\S]*(token|secret|password|otp)/i.test(code),
+    message: 'Weak random value used for sensitive data.',
+    fix: 'Use a cryptographic random generator for secrets and tokens.',
+  },
 ]
 
 function scanCode(code) {
@@ -59,4 +81,3 @@ function scanCode(code) {
 }
 
 module.exports = { scanCode }
-
