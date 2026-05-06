@@ -10,7 +10,9 @@ const postCode = async (path, code) => {
 }
 
 export const explainCode = (code) => postCode('/ai/explain', code)
+export const reviewCode = (code) => postCode('/ai/review', code)
 export const fixCode = (code) => postCode('/ai/fix', code)
+export const optimizeCode = (code) => postCode('/ai/optimize', code)
 export const generateCode = (code) => postCode('/ai/generate', code)
+export const documentCode = (code) => postCode('/ai/document', code)
 export const scanSecurity = (code) => postCode('/security/scan', code)
-

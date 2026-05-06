@@ -4,10 +4,16 @@ const { buildPrompt } = require('../utils/prompts')
 const fallbackResponses = {
   explain:
     'This code builds a SQL query by joining user input directly into the string. That is dangerous because an attacker can change the query behavior.',
+  review:
+    'Review: the main issue is unsafe user input in the SQL query. Add input validation, use prepared statements, and avoid logging sensitive query data.',
   fix:
     'Use parameterized queries instead of string concatenation. Example: db.query("SELECT * FROM users WHERE id = ?", [userId]);',
+  optimize:
+    'Optimization idea: keep database access in a small helper function, validate the user id once, and reuse a parameterized query.',
   generate:
     'Example safe helper:\n\nfunction getUserById(db, userId) {\n  return db.query("SELECT * FROM users WHERE id = ?", [userId]);\n}',
+  document:
+    'Documentation comment:\n\n// Fetch a user by id using a parameterized query to avoid SQL injection.',
 }
 
 async function runAiTask(task, code) {
@@ -47,4 +53,3 @@ async function runAiTask(task, code) {
 }
 
 module.exports = { runAiTask }
-

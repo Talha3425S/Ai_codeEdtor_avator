@@ -17,7 +17,9 @@ const handleAiRequest = (task) => async (req, res, next) => {
 
 module.exports = {
   explainCode: handleAiRequest('explain'),
+  reviewCode: handleAiRequest('review'),
   fixCode: handleAiRequest('fix'),
+  optimizeCode: handleAiRequest('optimize'),
   generateCode: handleAiRequest('generate'),
+  documentCode: handleAiRequest('document'),
 }
-

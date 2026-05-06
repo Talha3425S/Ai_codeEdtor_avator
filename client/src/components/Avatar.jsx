@@ -1,40 +1,72 @@
-import { Volume2 } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { Square, Volume2 } from 'lucide-react'
 
 function Avatar({ text }) {
+  const [autoSpeak, setAutoSpeak] = useState(false)
+  const [speaking, setSpeaking] = useState(false)
   const canSpeak = Boolean(text) && 'speechSynthesis' in window
 
-  const speak = () => {
+  const speak = useCallback(() => {
     if (!canSpeak) return
 
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.rate = 0.95
     utterance.pitch = 1
+    utterance.onstart = () => setSpeaking(true)
+    utterance.onend = () => setSpeaking(false)
+    utterance.onerror = () => setSpeaking(false)
     window.speechSynthesis.speak(utterance)
+  }, [canSpeak, text])
+
+  const stop = () => {
+    if (!('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    setSpeaking(false)
   }
+
+  useEffect(() => {
+    if (autoSpeak && canSpeak) {
+      speak()
+    }
+
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [autoSpeak, canSpeak, speak])
 
   return (
     <section className="panel">
       <div className="panel-header">
         <h2>Avatar</h2>
+        <label className="toggle-row">
+          <input
+            type="checkbox"
+            checked={autoSpeak}
+            onChange={(event) => setAutoSpeak(event.target.checked)}
+          />
+          Auto
+        </label>
       </div>
       <div className="avatar-body">
-        <div className="avatar-face" aria-hidden="true">
+        <div className={`avatar-face ${speaking ? 'speaking' : ''}`} aria-hidden="true">
           AI
         </div>
         <div className="avatar-copy">
-          <strong>Ready</strong>
+          <strong>{speaking ? 'Speaking' : 'Ready'}</strong>
           <p>{text ? 'Latest result loaded' : 'Waiting for output'}</p>
         </div>
         <button
           className="speak-button"
           type="button"
-          onClick={speak}
+          onClick={speaking ? stop : speak}
           disabled={!canSpeak}
-          title="Read output aloud"
+          title={speaking ? 'Stop reading' : 'Read output aloud'}
         >
-          <Volume2 size={16} />
-          Speak
+          {speaking ? <Square size={16} /> : <Volume2 size={16} />}
+          {speaking ? 'Stop' : 'Speak'}
         </button>
       </div>
     </section>
@@ -42,4 +74,3 @@ function Avatar({ text }) {
 }
 
 export default Avatar
-

@@ -30,6 +30,21 @@ function VoiceControl({ onCommand, onInsert, loading }) {
       return
     }
 
+    if (command.includes('review')) {
+      onCommand('review')
+      return
+    }
+
+    if (command.includes('optimize')) {
+      onCommand('optimize')
+      return
+    }
+
+    if (command.includes('document') || command.includes('comment')) {
+      onCommand('document')
+      return
+    }
+
     if (command.includes('generate')) {
       onCommand('generate')
       return
@@ -82,7 +97,9 @@ function VoiceControl({ onCommand, onInsert, loading }) {
           </button>
         </div>
         <p className="voice-status">
-          {isSupported ? transcript || 'No transcript yet.' : 'Voice not supported.'}
+          {isSupported
+            ? transcript || 'Say explain, review, fix, optimize, generate, document, or scan.'
+            : 'Voice not supported.'}
         </p>
       </div>
     </section>
@@ -90,4 +107,3 @@ function VoiceControl({ onCommand, onInsert, loading }) {
 }
 
 export default VoiceControl
-
