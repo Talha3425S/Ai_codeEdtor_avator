@@ -1,5 +1,7 @@
 # AI Code Editor Avatar
 
+Repository: `Ai_codeEdtor_avator`
+
 A React and Node.js starter project for an AI developer assistant. The app lets a user write code, request AI-style help, run a simple security scan, and hear the result through a browser speech avatar.
 
 ## Tech Stack
