@@ -110,6 +110,7 @@ function Home() {
         <Editor code={code} onChange={setCode} />
         <aside className="side-column">
           <Toolbar onAction={runAction} loading={loading} />
+          <Avatar text={error || result} />
           <VoiceControl
             onCommand={runAction}
             onInsert={insertVoiceText}
@@ -122,7 +123,6 @@ function Home() {
             findings={findings}
             loading={loading}
           />
-          <Avatar text={error || result} />
         </aside>
       </div>
     </main>

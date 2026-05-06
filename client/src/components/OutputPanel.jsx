@@ -29,7 +29,12 @@ function OutputPanel({ status, result, error, findings = [], loading }) {
                   </span>
                   <strong>{finding.message}</strong>
                 </div>
-                <p>{finding.fix}</p>
+                <p>
+                  <strong>Why:</strong> {finding.reason}
+                </p>
+                <p>
+                  <strong>Solution:</strong> {finding.fix}
+                </p>
               </article>
             ))}
           </div>

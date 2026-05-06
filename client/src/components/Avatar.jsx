@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Square, Volume2 } from 'lucide-react'
+import ThreeAvatarScene from './ThreeAvatarScene'
 
 function Avatar({ text }) {
   const [autoSpeak, setAutoSpeak] = useState(false)
@@ -51,23 +52,23 @@ function Avatar({ text }) {
         </label>
       </div>
       <div className="avatar-body">
-        <div className={`avatar-face ${speaking ? 'speaking' : ''}`} aria-hidden="true">
-          AI
+        <ThreeAvatarScene speaking={speaking} />
+        <div className="avatar-controls">
+          <div className="avatar-copy">
+            <strong>{speaking ? 'Explaining' : 'Ready'}</strong>
+            <p>{text ? 'Latest result loaded' : 'Waiting for scan or AI output'}</p>
+          </div>
+          <button
+            className="speak-button"
+            type="button"
+            onClick={speaking ? stop : speak}
+            disabled={!canSpeak}
+            title={speaking ? 'Stop reading' : 'Read output aloud'}
+          >
+            {speaking ? <Square size={16} /> : <Volume2 size={16} />}
+            {speaking ? 'Stop' : 'Speak'}
+          </button>
         </div>
-        <div className="avatar-copy">
-          <strong>{speaking ? 'Speaking' : 'Ready'}</strong>
-          <p>{text ? 'Latest result loaded' : 'Waiting for output'}</p>
-        </div>
-        <button
-          className="speak-button"
-          type="button"
-          onClick={speaking ? stop : speak}
-          disabled={!canSpeak}
-          title={speaking ? 'Stop reading' : 'Read output aloud'}
-        >
-          {speaking ? <Square size={16} /> : <Volume2 size={16} />}
-          {speaking ? 'Stop' : 'Speak'}
-        </button>
       </div>
     </section>
   )
