@@ -1,4 +1,4 @@
-const { runAiTask } = require('../services/aiService')
+const { checkAiConnection, runAiTask } = require('../services/aiService')
 
 const handleAiRequest = (task) => async (req, res, next) => {
   try {
@@ -16,6 +16,14 @@ const handleAiRequest = (task) => async (req, res, next) => {
 }
 
 module.exports = {
+  checkAiStatus: async (_req, res, next) => {
+    try {
+      const status = await checkAiConnection()
+      return res.json(status)
+    } catch (error) {
+      return next(error)
+    }
+  },
   explainCode: handleAiRequest('explain'),
   reviewCode: handleAiRequest('review'),
   fixCode: handleAiRequest('fix'),

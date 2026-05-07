@@ -6,10 +6,12 @@ const {
   documentCode,
   optimizeCode,
   reviewCode,
+  checkAiStatus,
 } = require('../controllers/aiController')
 
 const router = express.Router()
 
+router.get('/status', checkAiStatus)
 router.post('/explain', explainCode)
 router.post('/review', reviewCode)
 router.post('/fix', fixCode)

@@ -11,6 +11,7 @@ import {
   documentCode,
   optimizeCode,
   reviewCode,
+  checkAiStatus,
   scanSecurity,
 } from '../services/api'
 
@@ -46,7 +47,45 @@ function Home() {
   const [findings, setFindings] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [checkingAi, setCheckingAi] = useState(false)
+  const [aiStatus, setAiStatus] = useState({
+    state: 'unknown',
+    message: 'AI not checked yet.',
+    model: '',
+  })
   const lineCount = code.split('\n').length
+
+  const runAiStatusCheck = async () => {
+    setCheckingAi(true)
+
+    try {
+      const response = await checkAiStatus()
+      const outputLines = [
+        response.message,
+        'Model: ' + (response.model || 'not set'),
+        response.sample ? 'Sample: ' + response.sample : '',
+        response.details ? 'Details: ' + response.details : '',
+      ].filter(Boolean)
+
+      setAiStatus(response)
+      setStatus(response.ok ? 'AI connected' : 'AI setup issue')
+      setResult(outputLines.join('\n'))
+      setError('')
+    } catch (requestError) {
+      const message =
+        requestError.response?.data?.error ||
+        'Could not check AI status. Make sure backend is running.'
+      setAiStatus({
+        state: 'error',
+        message,
+        model: '',
+      })
+      setStatus('AI check failed')
+      setError(message)
+    } finally {
+      setCheckingAi(false)
+    }
+  }
 
   const runAction = async (action) => {
     setLoading(true)
@@ -71,7 +110,7 @@ function Home() {
   }
 
   const insertVoiceText = (text) => {
-    setCode((currentCode) => `${currentCode}\n\n// Voice note: ${text}`)
+    setCode((currentCode) => currentCode + '\n\n// Voice note: ' + text)
   }
 
   return (
@@ -84,7 +123,28 @@ function Home() {
             <p>Developer assistant workspace</p>
           </div>
         </div>
-        <span className="server-pill">API: localhost:5000</span>
+        <div className={'api-status ' + aiStatus.state}>
+          <div>
+            <strong>
+              {aiStatus.state === 'working'
+                ? 'AI Working'
+                : aiStatus.state === 'demo'
+                  ? 'Demo Mode'
+                  : aiStatus.state === 'error'
+                    ? 'AI Issue'
+                    : 'AI Status'}
+            </strong>
+            <span>{aiStatus.message}</span>
+          </div>
+          <button
+            type="button"
+            onClick={runAiStatusCheck}
+            disabled={checkingAi}
+            title="Check whether the backend can call the AI API"
+          >
+            {checkingAi ? 'Checking' : 'Check AI'}
+          </button>
+        </div>
       </header>
 
       <section className="meta-strip" aria-label="Workspace status">

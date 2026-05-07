@@ -9,6 +9,11 @@ const postCode = async (path, code) => {
   return response.data
 }
 
+export const checkAiStatus = async () => {
+  const response = await api.get('/ai/status')
+  return response.data
+}
+
 export const explainCode = (code) => postCode('/ai/explain', code)
 export const reviewCode = (code) => postCode('/ai/review', code)
 export const fixCode = (code) => postCode('/ai/fix', code)

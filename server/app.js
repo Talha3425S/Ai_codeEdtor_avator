@@ -20,7 +20,10 @@ app.use('/api/security', securityRoutes)
 
 app.use((err, _req, res, _next) => {
   console.error(err)
-  res.status(500).json({ error: 'Server error. Please try again.' })
+  res.status(err.statusCode || 500).json({
+    error: err.publicMessage || 'Server error. Please try again.',
+    details: err.details,
+  })
 })
 
 app.listen(PORT, () => {
