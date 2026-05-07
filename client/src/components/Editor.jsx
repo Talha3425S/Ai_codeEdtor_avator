@@ -1,11 +1,18 @@
-import MonacoEditor from '@monaco-editor/react'
+﻿import MonacoEditor from '@monaco-editor/react'
 
-function Editor({ code, onChange }) {
+function Editor({ code, onChange, suggestions = [] }) {
+  const primarySuggestion = suggestions[0]
+
   return (
     <section className="panel">
       <div className="panel-header">
         <h2>Code Editor</h2>
-        <span className="language-tag">JavaScript</span>
+        <div className="editor-badges">
+          <span className="assistant-tag">
+            Avatar linked{primarySuggestion ? `: ${primarySuggestion.severity}` : ''}
+          </span>
+          <span className="language-tag">JavaScript</span>
+        </div>
       </div>
       <div className="editor-frame">
         <MonacoEditor
@@ -28,4 +35,3 @@ function Editor({ code, onChange }) {
 }
 
 export default Editor
-

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useMemo, useState } from 'react'
 import Avatar from '../components/Avatar'
 import Editor from '../components/Editor'
 import OutputPanel from '../components/OutputPanel'
@@ -13,6 +13,10 @@ import {
   reviewCode,
   scanSecurity,
 } from '../services/api'
+import {
+  getAvatarSuggestionText,
+  getLiveSuggestions,
+} from '../utils/liveSuggestions'
 
 const starterCode = `const userId = req.query.id;
 const query = "SELECT * FROM users WHERE id = " + userId;
@@ -47,6 +51,11 @@ function Home() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const lineCount = code.split('\n').length
+  const liveSuggestions = useMemo(() => getLiveSuggestions(code), [code])
+  const liveAvatarText = useMemo(
+    () => getAvatarSuggestionText(liveSuggestions),
+    [liveSuggestions],
+  )
 
   const runAction = async (action) => {
     setLoading(true)
@@ -97,20 +106,28 @@ function Home() {
           <span>Characters</span>
         </div>
         <div>
-          <strong>{findings.length}</strong>
-          <span>Findings</span>
+          <strong>{liveSuggestions.length}</strong>
+          <span>Live Tips</span>
         </div>
         <div>
-          <strong>{loading ? 'Busy' : 'Ready'}</strong>
-          <span>Status</span>
+          <strong>{loading ? 'Busy' : 'Linked'}</strong>
+          <span>Avatar</span>
         </div>
       </section>
 
       <div className="workspace">
-        <Editor code={code} onChange={setCode} />
+        <Editor
+          code={code}
+          onChange={setCode}
+          suggestions={liveSuggestions}
+        />
         <aside className="side-column">
           <Toolbar onAction={runAction} loading={loading} />
-          <Avatar text={error || result} />
+          <Avatar
+            text={error || result}
+            liveText={liveAvatarText}
+            suggestions={liveSuggestions}
+          />
           <VoiceControl
             onCommand={runAction}
             onInsert={insertVoiceText}
