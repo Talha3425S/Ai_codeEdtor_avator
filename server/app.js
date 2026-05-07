@@ -33,6 +33,7 @@ async function logAiStartupStatus() {
 
   console.log('----------------------------------------')
   console.log(label)
+  console.log('Provider:', status.provider || 'not set')
   console.log('Model:', status.model || 'not set')
   console.log('Message:', status.message)
 
