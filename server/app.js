@@ -4,6 +4,7 @@ const cors = require('cors')
 const express = require('express')
 const aiRoutes = require('./routes/aiRoutes')
 const securityRoutes = require('./routes/securityRoutes')
+const { checkAiConnection } = require('./services/aiService')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -26,7 +27,34 @@ app.use((err, _req, res, _next) => {
   })
 })
 
+async function logAiStartupStatus() {
+  const status = await checkAiConnection()
+  const label = status.ok ? 'AI API working' : 'AI API issue'
+
+  console.log('----------------------------------------')
+  console.log(label)
+  console.log('Model:', status.model || 'not set')
+  console.log('Message:', status.message)
+
+  if (status.statusCode) {
+    console.log('Status code:', status.statusCode)
+  }
+
+  if (status.details) {
+    console.log('Details:', status.details)
+  }
+
+  if (status.sample) {
+    console.log('Sample:', status.sample)
+  }
+
+  console.log('----------------------------------------')
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
+  logAiStartupStatus().catch((error) => {
+    console.log('AI API issue')
+    console.log(error.message)
+  })
 })
-
